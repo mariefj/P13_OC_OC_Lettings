@@ -23,12 +23,14 @@ jobs:
       - image: cimg/python:3.11.2
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: build image
           command: docker build -t $DOCKERHUB_USERNAME/oc-lettings:0
       - run:
           name: log to dockerhub
-          command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          command: echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
       - run:
           name: push to dockerhub
           command: |
@@ -40,8 +42,8 @@ workflows:
     jobs:
       - test-and-lint
       - build-and-push-dockerhub:
-        filters:
-          branches:
-            only: main
-        requires:
-          - test-and-lint
+          filters:
+            branches:
+              only: main
+          requires:
+            - test-and-lint
