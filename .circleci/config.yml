@@ -1,14 +1,17 @@
 version: 2.1
 
+orbs:
+  python: circleci/python@2.1.1
+
 jobs:
   test-and-lint:
+    executor: python/default
     docker:
       - image: cimg/python:3.11.2
     steps:
       - checkout
-      - run:
-          name: install dependencies
-          command: pip install -r requirements.txt
+      - python/install-packages:
+        pkg-manager: pip
       - run:
           name: lint
           command: flake8
