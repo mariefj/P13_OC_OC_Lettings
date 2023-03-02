@@ -4,7 +4,9 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 from . import config
 
+
 sentry_sdk.init(
+    # dsn=os.environ['SENTRY_DSN'],
     dsn=config.SENTRY_DSN,
     integrations=[DjangoIntegration()],
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -24,10 +26,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.SECRET_KEY
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['ENV'] != 'PRODUCTION'
 
 ALLOWED_HOSTS = []
 

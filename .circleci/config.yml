@@ -1,51 +1,22 @@
 version: 2.1
+
 jobs:
-  # running commands on a basic image
-  Hello-World:
+  test-and-lint:
     docker:
-      - image: cimg/base:2021.04
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - run:
-          name: Saying Hello
-          command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-  # fetching code from the repo
-  Fetch-Code:
-    docker:
-      - image: cimg/base:2021.04
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+      - image: cimg/python:3.11.2
     steps:
       - checkout
       - run:
-          name: Getting the Code
-          command: |
-            ls -al
-            echo '^^^Your repo files^^^'
-  # running a node container
-  Using-Node:
-    docker:
-      - image: cimg/node:17.2
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
+          name: install dependencies
+          command: pip install -r requirements.txt
       - run:
-          name: Running the Node Container
-          command: |
-            node -v
+          name: lint
+          command: flake8
+      - run:
+          name: run tests
+          command: pytest
+
 workflows:
-  Example-Workflow:
+  build-and-test-workflow:
     jobs:
-      - Hello-World
-      - Fetch-Code:
-          requires:
-            - Hello-World
-      - Using-Node:
-          requires:
-            - Fetch-Code
+      - test-and-lint
