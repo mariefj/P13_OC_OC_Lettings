@@ -4,7 +4,6 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 
 sentry_sdk.init(
-    # dsn=os.environ['SENTRY_DSN'],
     dsn=os.environ['SENTRY_DSN'],
     integrations=[DjangoIntegration()],
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -29,7 +28,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['ENV'] != 'PRODUCTION'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition

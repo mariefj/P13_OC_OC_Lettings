@@ -18,8 +18,30 @@ jobs:
       - run:
           name: run tests
           command: pytest
+  build-and-push-dockerhub:
+    docker:
+      - image: cimg/python:3.11.2
+    steps:
+      - checkout
+      - run:
+          name: build image
+          command: docker build -t $DOCKERHUB_USERNAME/oc-lettings:0
+      - run:
+          name: log to dockerhub
+          command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run:
+          name: push to dockerhub
+          command: |
+            docker tag $DOCKERHUB_USERNAME/oc-lettings:0 $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
 
 workflows:
   build-and-test-workflow:
     jobs:
       - test-and-lint
+      - build-and-push-dockerhub:
+        filters:
+          branches:
+            only: main
+        requires:
+          - test-and-lint
