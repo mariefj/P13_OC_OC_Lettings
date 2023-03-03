@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['ENV'] != 'PRODUCTION'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.environ['SERVER_NAME']]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.environ['SSH_HOST']]
 
 
 # Application definition
