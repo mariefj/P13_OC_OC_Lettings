@@ -36,9 +36,9 @@ jobs:
           command: |
             docker tag $DOCKERHUB_USERNAME/oc-lettings:0 $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
             docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
-    deploy_droplet_digitalocean:
-      machine:
-          enabled: true
+  deploy_droplet_digitalocean:
+  machine:
+      enabled: true
     steps:
       - checkout
       - run:
