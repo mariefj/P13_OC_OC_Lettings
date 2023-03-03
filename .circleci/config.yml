@@ -38,7 +38,7 @@ jobs:
             docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
 
 workflows:
-  build-and-test-workflow:
+  build-test-push-workflow:
     jobs:
       - test-and-lint
       - build-and-push-dockerhub:
