@@ -49,7 +49,7 @@ jobs:
           command: |
             ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME "docker stop oc-lettings"
             ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME "docker rm oc-lettings"
-            ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME "docker rm $DOCKERHUB_USERNAME/oc-lettings:current"
+            ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME "docker rmi $DOCKERHUB_USERNAME/oc-lettings:current"
       - run:
           name: pull and run image dockerhub
           command: |
