@@ -46,12 +46,19 @@ jobs:
           command: ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
       - run:
           name: rm previous images and containers
-          command: |
-            ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME "docker stop oc-lettings && docker rm oc-lettings && docker rmi -f \$(docker images -q $DOCKERHUB_USERNAME/oc-lettings:current)" || true
+          command: >
+            ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME 
+            "docker stop oc-lettings && 
+            docker rm oc-lettings && 
+            docker rmi -f \$(docker images -q $DOCKERHUB_USERNAME/oc-lettings:current)" 
+            || true
       - run:
           name: pull and run image dockerhub
-          command: |
-            ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME "docker pull $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 && docker tag $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USERNAME/oc-lettings:current && docker run --env ENV --env SECRET_KEY --env SENTRY_DSN --env SSH_HOST --name oc-lettings -d -p 8000:8000 $DOCKERHUB_USERNAME/oc-lettings:current"
+          command: >
+            ssh $SSH_USER@$SSH_HOST CIRCLE_SHA1=$CIRCLE_SHA1 DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME 
+            "docker pull $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 && 
+            docker tag $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USERNAME/oc-lettings:current && 
+            docker run --env ENV --env SECRET_KEY --env SENTRY_DSN --env SSH_HOST --name oc-lettings -d -p 8000:8000 $DOCKERHUB_USERNAME/oc-lettings:current"
 
 workflows:
   build-test-push-workflow:
